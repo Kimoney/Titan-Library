@@ -58,7 +58,7 @@ li{
     border-radius: 5px;
     margin: 10px;
 }
-#recent-search-btn{
+.recent-search-btn{
     background-color: rgb(112, 11, 151);
     color: bisque;
     border-radius: 5px;

@@ -27,6 +27,22 @@ function displaySearch (url){
 }
 displaySearch(hiiNayo)
 
+// Function to save our search with a function
+function saveSearch (url, searchText, dateString){
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type":"application/json"
+            },
+        body: JSON.stringify(
+            {
+                recent_search:searchText,
+                time: dateString
+            }
+            )
+                })
+    }
+
 // Function to handle our search and make a POST request
 
 const searchBtn = document.getElementById('search-form');
@@ -47,24 +63,7 @@ function handleSearch (event){
     const dateString = currentHour + ':' + currentMinute + ":" + currentSeconds + " on " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
     
     const searchText = document.getElementById('search-input').value;
-    console.log(`You are searched for ${searchText} at ${dateString}`)
-    // Save to Json with a function
-    async function saveSearch (url){
-        await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type":"application/json"
-            },
-            body: JSON.stringify(
-                {
-                    recent_search:searchText,
-                    time: dateString
-                }
-            )
-                    })
-
-    }
-    saveSearch(recentSearchUrl)
+    saveSearch(recentSearchUrl, searchText, dateString)
 }
 
 // Write a function that loads the db.json showing the recent searches
@@ -79,26 +78,32 @@ function displayRecentSearch (){
         
         data.forEach(previous => {
             let li = document.createElement('li');
+            let jsonId= previous.id;
             li.id = "recent";
             li.innerHTML = 
             `<div id="recent-list-div">
-            <button id="recent-search-btn">${previous.recent_search}</button>
+            <button class="recent-search-btn" id="recent-search-btn-${jsonId}">${previous.recent_search}</button>
             <span id="search-time"><i class="fa fa-clock-o" aria-hidden="true"></i> ${previous.time}</span> <i class="fa fa-trash" id="delete-icon-${+previous.id}" aria-hidden="true"></i>
             </div>
             `
-            jsonId= previous.id;
             
             myDiv.appendChild(li)
-            // Function that deletes the recent searches by making a DELETE request
-            const deleteIcon = document.getElementById(`delete-icon-${+previous.id}`)
-            deleteIcon.addEventListener('click', deleteSearchHistory)
+    // Trying patch
+            const searchText = document.getElementById(`recent-search-btn-${jsonId}`).textContent;
+            console.log(searchText)
 
+
+            // Function that deletes the recent searches by making a DELETE request
+            const deleteIcon = document.getElementById(`delete-icon-${+jsonId}`)
+            deleteIcon.addEventListener('click', deleteSearchHistory)
+    //Function that deletes the user search 
             function deleteSearchHistory (){
-                const deleteUrl = recentSearchUrl+previous.id;
-                fetch(deleteUrl, { method: "DELETE"})
+                const deleteUrl = recentSearchUrl+jsonId;
+                fetch(deleteUrl, {method: "DELETE"})
             }
         })
     }
 
 }
 displayRecentSearch()
+
