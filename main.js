@@ -2,7 +2,7 @@ console.log("We init")
 
 // We have a recent search page using a local JSON database.
 // Let's fetch that data
-const recentSearchUrl = "http://localhost:3000/recents"
+const recentSearchUrl = "http://localhost:3000/recents/"
 const hiiNayo = "https://openlibrary.org/search.json?q=the+lord+of+the+rings"
 
 function displaySearch (url){
@@ -83,18 +83,19 @@ function displayRecentSearch (){
             li.innerHTML = 
             `<div id="recent-list-div">
             <button id="recent-search-btn">${previous.recent_search}</button>
-            <span id="search-time"><i class="fa fa-clock-o" aria-hidden="true"></i> ${previous.time}</span> <i class="fa fa-trash" id="delete-icon" aria-hidden="true"></i>
+            <span id="search-time"><i class="fa fa-clock-o" aria-hidden="true"></i> ${previous.time}</span> <i class="fa fa-trash" id="delete-icon-${+previous.id}" aria-hidden="true"></i>
             </div>
             `
             jsonId= previous.id;
             
             myDiv.appendChild(li)
             // Function that deletes the recent searches by making a DELETE request
-            const deleteIcon = document.getElementById('delete-icon')
+            const deleteIcon = document.getElementById(`delete-icon-${+previous.id}`)
             deleteIcon.addEventListener('click', deleteSearchHistory)
 
             function deleteSearchHistory (){
-                console.log('clicked')
+                const deleteUrl = recentSearchUrl+previous.id;
+                fetch(deleteUrl, { method: "DELETE"})
             }
         })
     }
