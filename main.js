@@ -89,6 +89,13 @@ function displayRecentSearch (){
             jsonId= previous.id;
             
             myDiv.appendChild(li)
+            // Function that deletes the recent searches by making a DELETE request
+            const deleteIcon = document.getElementById('delete-icon')
+            deleteIcon.addEventListener('click', deleteSearchHistory)
+
+            function deleteSearchHistory (){
+                console.log('clicked')
+            }
         })
     }
 
