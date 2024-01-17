@@ -7,8 +7,21 @@
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-    <h1> Titan Library</h1>
-    
-    <script src="./main.js"></script>
+<div id="main-container">
+        <div id="search-div">
+            <h1 id="heading"> Titan Library</h1>
+            <form>
+                <input placeholder="Author or Book Name" id="search-input" required>
+                <button id="search-btn" type="submit">Search</button>
+            </form>
+        </div>
+        <div id="recent-search-div">
+            <h1 id="heading"> Recent Search</h1>
+            <div id="recent-data">
+                <h2> You haven't made a serach yet</h2>
+            </div>
+        </div>
+</div>
+<script src="./main.js"></script>
 </body>
 </html>
