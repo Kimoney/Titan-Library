@@ -38,10 +38,13 @@ function saveSearch (url, searchText, dateString){
             {
                 recent_search:searchText,
                 time: dateString
-            }
-            )
+            })
                 })
-    }
+}
+//Function that deletes the user search history making a DELETE request
+function deleteSearchHistory (url){
+    fetch(url, {method: "DELETE"})
+}
 
 // Function to handle our search and make a POST request
 
@@ -63,6 +66,8 @@ function handleSearch (event){
     const dateString = currentHour + ':' + currentMinute + ":" + currentSeconds + " on " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
     
     const searchText = document.getElementById('search-input').value;
+
+// We call the function below to save the search in our local json
     saveSearch(recentSearchUrl, searchText, dateString)
 }
 
@@ -88,22 +93,18 @@ function displayRecentSearch (){
             `
             
             myDiv.appendChild(li)
-    // Trying patch
-            const searchText = document.getElementById(`recent-search-btn-${jsonId}`).textContent;
-            console.log(searchText)
-
-
             // Function that deletes the recent searches by making a DELETE request
             const deleteIcon = document.getElementById(`delete-icon-${+jsonId}`)
-            deleteIcon.addEventListener('click', deleteSearchHistory)
-    //Function that deletes the user search 
-            function deleteSearchHistory (){
+
+            deleteIcon.addEventListener('click', function(){
+            // The delete URL is dynamic and requires an ID
+            // The function takes an argument but since we can't invoke it we will put it in an anonymous function invoked when the event is fired
                 const deleteUrl = recentSearchUrl+jsonId;
-                fetch(deleteUrl, {method: "DELETE"})
-            }
+                deleteSearchHistory(deleteUrl)
+            })
+
         })
     }
 
 }
 displayRecentSearch()
-
