@@ -84,3 +84,9 @@ li{
     padding-right: 5px;
     font-size: large !important;
 }
+#cards-container{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}

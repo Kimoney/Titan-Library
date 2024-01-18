@@ -26,6 +26,7 @@ function displaySearch (url){
     })
 }
 displaySearch(hiiNayo)
+
 // Function to save our search with a function
 function saveSearch (url, searchText, dateString){
     fetch(url, {
