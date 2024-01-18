@@ -23,7 +23,7 @@ function displaySearch (url){
             errorDiv.id = "search-div"
             errorDiv.innerHTML = 
             `
-            <h1 id="heading">We Did Not Find Anything</h1>
+            <h1 id="heading">I Found Nothing</h1>
             <a href="http://127.0.0.1:5500/index.html?"><button id="error-search-btn" type="submit">Try Again</button></a>
             `
             myDiv.appendChild(errorDiv)
@@ -122,7 +122,6 @@ function displayWishlists (){
     .then(data => renderWishlists(data))
 // Function Handling data from fetch
     function renderWishlists(data){
-        console.log(data)
         const myDiv = document.getElementById('wishlist-data');
         
         data.forEach(singleWishlist => {
@@ -131,7 +130,7 @@ function displayWishlists (){
             li.id = "singleWishlist";
             li.innerHTML = 
             `<div id="wishlist-list-div">
-            <button class="wishlist-btn" id="wishlist-btn-${jsonId}">${singleWishlist.wishlist}</button>
+            <p class="wishlist-p" id="wishlist-btn-${jsonId}">${singleWishlist.wishlist}</p>
             <span id="wishlist-time"><i class="fa fa-clock-o" aria-hidden="true"></i> ${singleWishlist.time}</span> <i class="fa fa-trash" id="delete-icon-${+singleWishlist.id}" aria-hidden="true"></i>
             </div>
             ` 
