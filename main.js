@@ -15,14 +15,17 @@ function displaySearch (url){
             id: books.key,
             author: books.author_name,
             title: books.title,
-            isbn: books.isbn,
-            published: books.publish_date,
-            location: books.publish_place,
+            isbn: books.isbn[0],
+            published: books.publish_date[0],
+            location: books.publish_place[0],
             cover: books.cover_i,
             genre: books.subject
         }))
         console.log(myObj)
         console.log(myObj[0].title)
+        myObj.forEach(book => {
+            console.log(`This is ${book.title} by ${book.author} and it was published in ${book.location}, ${book.published}, the ISBN is ${book.isbn}`)
+        })
     })
 }
 displaySearch(hiiNayo)
