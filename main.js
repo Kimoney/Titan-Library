@@ -1,41 +1,40 @@
-console.log("We init")
-
-// We have a recent search page using a local JSON database.
-// Let's fetch that data
+// We have a recent search column that is using a local JSON database, the variable below holds that url
 const recentSearchUrl = "http://localhost:3000/recents/"
-const searchApiUrl = "https://openlibrary.org/search.json?q=lord+rings"
 
 function displaySearch (url){
     fetch(url)
     .then(response => response.json())
     .then(data => {
-        const mine = data.docs.slice(0,30);
-        console.log(mine)
-        const myObj = mine.map(books => ({
+        // From the public API, we only take a specific range from the results
+        const myResults = data.docs.slice(0,30);
+        // The hasOwnProperty method checks whether the ISBN is available because it is vital in generating the book covers
+        const filteredResult = myResults.filter(singleObject => singleObject.hasOwnProperty('isbn'))
+        console.log(filteredResult)
+        // Define the properties of our new object
+        const myObj = filteredResult.map(books => ({
             id: books.key,
             author: books.author_name,
             title: books.title,
-            isbn: books.isbn,
+            isbn: books.isbn[0],
             published: books.first_publish_year
         }))
-        console.log(myObj)
-        console.log(myObj[0].title)
+    // Create the eelements that will render the results
         const cardContainer = document.createElement('div');
             cardContainer.id = "cards-container"
             const searchDiv = document.getElementById('search-div')
             if (document.contains(searchDiv)){
                 searchDiv.replaceWith(cardContainer)
             }
-
+    // Iteration of each book from our sliced and filtered results
         myObj.forEach(book => {
-            console.log(`This is ${book.title} by ${book.author} the ISBN is ${book.isbn}`)
+    // Grab the element to append the dynamic data
             const myDiv = document.getElementById('cards-container')
             
             let resultDiv = document.createElement('div')
             resultDiv.id = "card"
             resultDiv.innerHTML = 
             `
-                        <img id="cover" src="https://covers.openlibrary.org/b/id/12059372-M.jpg" alt="${book.isbn}">
+                        <img id="cover" src="https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg" alt="${book.isbn}">
                         <p id="book-title">${book.title}</p>
                         <p id="book-author">${book.author}</p>
                         <p id="published">First published in ${book.published}</p>
@@ -44,7 +43,6 @@ function displaySearch (url){
         })
     })
 }
-// displaySearch(searchApiUrl)
 
 // Function to save our search with a function
 function saveSearch (url, searchText, dateString){
@@ -129,16 +127,3 @@ function displayRecentSearch (){
 
 }
 displayRecentSearch()
-
-
-// `
-// <div id="cards-container">
-//         <div id="card">
-//             <img id="cover" src="https://covers.openlibrary.org/b/id/12059372-M.jpg" alt="${book.isbn}">
-//             <p id="genre-p">Genre: <span id="genre"></span></p>
-//             <p id="book-title">${book.title}</p>
-//             <p id="book-author">${book.author}</p>
-//             <p id="published">Published in </p>
-//         </div>
-// </div>
-// `
