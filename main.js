@@ -19,14 +19,13 @@ function displaySearch (url){
             published: books.publish_date,
             location: books.publish_place,
             cover: books.cover_i,
-            subject: books.subject
+            genre: books.subject
         }))
         console.log(myObj)
         console.log(myObj[0].title)
     })
 }
 displaySearch(hiiNayo)
-
 // Function to save our search with a function
 function saveSearch (url, searchText, dateString){
     fetch(url, {

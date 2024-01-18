@@ -22,8 +22,9 @@ body{
 #recent-search-div {
     width: 25%;
     align-items:center;
-    height: 25vh;
     text-align: center;
+    max-height: 900px;
+    overflow-y: scroll;
 }
 #heading{
     margin: 20px;
