@@ -3,52 +3,48 @@ console.log("We init")
 // We have a recent search page using a local JSON database.
 // Let's fetch that data
 const recentSearchUrl = "http://localhost:3000/recents/"
-const hiiNayo = "https://openlibrary.org/search.json?q=the+lord+of+the+rings"
+const searchApiUrl = "https://openlibrary.org/search.json?q=lord+rings"
 
 function displaySearch (url){
     fetch(url)
     .then(response => response.json())
     .then(data => {
-        const mine = data.docs.slice(0,3);
+        const mine = data.docs.slice(0,30);
         console.log(mine)
         const myObj = mine.map(books => ({
             id: books.key,
             author: books.author_name,
             title: books.title,
-            isbn: books.isbn[0],
-            published: books.publish_date[0],
-            location: books.publish_place[0],
-            cover: books.cover_i,
-            genre: books.subject[1]
+            isbn: books.isbn,
+            published: books.first_publish_year
         }))
         console.log(myObj)
         console.log(myObj[0].title)
-        myObj.forEach(book => {
-            console.log(`This is ${book.title} by ${book.author} and it was published in ${book.location}, ${book.published}, the ISBN is ${book.isbn}`)
-            const mainContainer = document.getElementById('main-container')
+        const cardContainer = document.createElement('div');
+            cardContainer.id = "cards-container"
             const searchDiv = document.getElementById('search-div')
             if (document.contains(searchDiv)){
-                searchDiv.remove()
+                searchDiv.replaceWith(cardContainer)
             }
+
+        myObj.forEach(book => {
+            console.log(`This is ${book.title} by ${book.author} the ISBN is ${book.isbn}`)
+            const myDiv = document.getElementById('cards-container')
+            
             let resultDiv = document.createElement('div')
-            resultDiv.id = "result-back-div"
+            resultDiv.id = "card"
             resultDiv.innerHTML = 
             `
-            <div id="cards-container">
-                    <div id="card">
-                        <img id="cover" src="https://covers.openlibrary.org/b/id/12059372-M.jpg" alt="cover">
-                        <p id="genre-p">Genre: <span id="genre">${book.genre}</span></p>
+                        <img id="cover" src="https://covers.openlibrary.org/b/id/12059372-M.jpg" alt="${book.isbn}">
                         <p id="book-title">${book.title}</p>
                         <p id="book-author">${book.author}</p>
-                        <p id="published">Published in ${book.location}, ${book.published}</p>
-                    </div>
-            </div>
+                        <p id="published">First published in ${book.published}</p>
             `
-            mainContainer.appendChild(resultDiv)
+            myDiv.appendChild(resultDiv)
         })
     })
 }
-displaySearch(hiiNayo)
+// displaySearch(searchApiUrl)
 
 // Function to save our search with a function
 function saveSearch (url, searchText, dateString){
@@ -89,9 +85,11 @@ function handleSearch (event){
     const dateString = currentHour + ':' + currentMinute + ":" + currentSeconds + " on " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
     
     const searchText = document.getElementById('search-input').value;
+    const newURL = `https://openlibrary.org/search.json?q=${searchText}`
 
 // We call the function below to save the search in our local json
-    saveSearch(recentSearchUrl, searchText, dateString)
+    // saveSearch(recentSearchUrl, searchText, dateString)
+    displaySearch(newURL)
 }
 
 // Write a function that loads the db.json showing the recent searches
@@ -131,3 +129,16 @@ function displayRecentSearch (){
 
 }
 displayRecentSearch()
+
+
+// `
+// <div id="cards-container">
+//         <div id="card">
+//             <img id="cover" src="https://covers.openlibrary.org/b/id/12059372-M.jpg" alt="${book.isbn}">
+//             <p id="genre-p">Genre: <span id="genre"></span></p>
+//             <p id="book-title">${book.title}</p>
+//             <p id="book-author">${book.author}</p>
+//             <p id="published">Published in </p>
+//         </div>
+// </div>
+// `
