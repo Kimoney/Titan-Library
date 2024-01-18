@@ -51,6 +51,16 @@ body{
     font-size: 2em;
     font-weight: bold;
 }
+#error-search-btn{
+    background-color: rgb(112, 11, 151);
+    color: bisque;
+    border: none;
+    border-radius: 5px;
+    width: 350px;
+    height: 50px;
+    font-size: 2em;
+    font-weight: bold;
+}
 ul{
     list-style: none;
 }
@@ -96,16 +106,18 @@ li{
     width: 250px;
     margin: 10px;
     height: 550px;
+    border-radius: 5px;
 }
 #cover{
     width: 100%;
 }
-#book-title, #book-author, #genre-p{
+#book-title, #book-author{
     text-align: left;
     width: 100%;
     padding-left: 5px;
     font-size: 0.9em;
 }
+
 #published{
     padding-left: 5px;
     width: 100%;    white-space: normal;

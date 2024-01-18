@@ -9,7 +9,25 @@ function displaySearch (url){
         const myResults = data.docs.slice(0,30);
         // The hasOwnProperty method checks whether the ISBN is available because it is vital in generating the book covers
         const filteredResult = myResults.filter(singleObject => singleObject.hasOwnProperty('isbn'))
-        console.log(filteredResult)
+        // The condition below alerts the user that there are no search results for their query when we fail to capture and array after filtering our data
+        if (filteredResult.length === 0){
+            console.log('error')
+            const myDiv = document.getElementById('main-container')
+        // This code removes and replaces the DOM element with an error and another form to make a search
+            const previousState = document.getElementById('search-div')
+            if(document.contains(previousState)){
+                previousState.remove()
+            }
+            
+            let errorDiv = document.createElement('div')
+            errorDiv.id = "search-div"
+            errorDiv.innerHTML = 
+            `
+            <h1 id="heading">We Did Not Find Anything</h1>
+            <a href="http://127.0.0.1:5500/index.html?"><button id="error-search-btn" type="submit">Try Again</button></a>
+            `
+            myDiv.appendChild(errorDiv)
+        } else {
         // Define the properties of our new object
         const myObj = filteredResult.map(books => ({
             id: books.key,
@@ -40,12 +58,13 @@ function displaySearch (url){
                         <p id="published">First published in ${book.published}</p>
             `
             myDiv.appendChild(resultDiv)
-        })
+        })}
     })
 }
 
-// Function to save our search with a function
-function saveSearch (url, searchText, dateString){
+// saveSearch is a function to save our wishlist
+
+function saveWishlist (url, myWishlist, dateString){
     fetch(url, {
         method: "POST",
         headers: {
@@ -53,40 +72,24 @@ function saveSearch (url, searchText, dateString){
             },
         body: JSON.stringify(
             {
-                recent_search:searchText,
+                wishlist:myWishlist,
                 time: dateString
             })
                 })
 }
-//Function that deletes the user search history making a DELETE request
+//deleteSearchHistory function that deletes the user search history making a DELETE request
 function deleteSearchHistory (url){
     fetch(url, {method: "DELETE"})
 }
 
-// Function to handle our search and make a POST request
-
+// searchBtn is a function that handles our search and make a GET request
 const searchBtn = document.getElementById('search-form');
 searchBtn.addEventListener('submit', handleSearch)
 
 function handleSearch (event){
-    event.preventDefault();
-
-    // The code captures the time a search was done and saves it to our db.json
-    const currentDate = new Date();
-    const currentDayOfMonth = currentDate.getDate()
-    const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
-    const currentYear = currentDate.getFullYear();
-    const currentHour = currentDate.getHours();
-    const currentMinute = currentDate.getMinutes();
-    const currentSeconds = currentDate.getSeconds();
-    // The variable below combines the time to a human readable time 
-    const dateString = currentHour + ':' + currentMinute + ":" + currentSeconds + " on " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
-    
+    event.preventDefault();    
     const searchText = document.getElementById('search-input').value;
     const newURL = `https://openlibrary.org/search.json?q=${searchText}`
-
-// We call the function below to save the search in our local json
-    // saveSearch(recentSearchUrl, searchText, dateString)
     displaySearch(newURL)
 }
 
@@ -127,3 +130,18 @@ function displayRecentSearch (){
 
 }
 displayRecentSearch()
+
+
+// Time 
+
+
+    // // The code captures the time a search was done and saves it to our db.json
+    // const currentDate = new Date();
+    // const currentDayOfMonth = currentDate.getDate()
+    // const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
+    // const currentYear = currentDate.getFullYear();
+    // const currentHour = currentDate.getHours();
+    // const currentMinute = currentDate.getMinutes();
+    // const currentSeconds = currentDate.getSeconds();
+    // // The variable below combines the time to a human readable time 
+    // const dateString = currentHour + ':' + currentMinute + ":" + currentSeconds + " on " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
