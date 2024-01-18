@@ -19,12 +19,32 @@ function displaySearch (url){
             published: books.publish_date[0],
             location: books.publish_place[0],
             cover: books.cover_i,
-            genre: books.subject
+            genre: books.subject[1]
         }))
         console.log(myObj)
         console.log(myObj[0].title)
         myObj.forEach(book => {
             console.log(`This is ${book.title} by ${book.author} and it was published in ${book.location}, ${book.published}, the ISBN is ${book.isbn}`)
+            const mainContainer = document.getElementById('main-container')
+            const searchDiv = document.getElementById('search-div')
+            if (document.contains(searchDiv)){
+                searchDiv.remove()
+            }
+            let resultDiv = document.createElement('div')
+            resultDiv.id = "result-back-div"
+            resultDiv.innerHTML = 
+            `
+            <div id="cards-container">
+                    <div id="card">
+                        <img id="cover" src="https://covers.openlibrary.org/b/id/12059372-M.jpg" alt="cover">
+                        <p id="genre-p">Genre: <span id="genre">${book.genre}</span></p>
+                        <p id="book-title">${book.title}</p>
+                        <p id="book-author">${book.author}</p>
+                        <p id="published">Published in ${book.location}, ${book.published}</p>
+                    </div>
+            </div>
+            `
+            mainContainer.appendChild(resultDiv)
         })
     })
 }

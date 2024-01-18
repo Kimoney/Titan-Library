@@ -93,9 +93,9 @@ li{
 }
 #card{
     border: 2px solid rgb(242, 175, 239);
-    width: 220px;
+    width: 250px;
     margin: 10px;
-    height: 60vh;
+    height: auto;
 }
 #cover{
     width: 100%;
@@ -108,7 +108,7 @@ li{
 }
 #genre {
     font-size: 0.7em;
-    float: inline-end;
+    /* float: inline-end; */
     padding-right: 5px;
 }
 #published{
