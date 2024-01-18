@@ -1,5 +1,5 @@
 // We have a recent search column that is using a local JSON database, the variable below holds that url
-const recentSearchUrl = "http://localhost:3000/recents/"
+const wishlistUrl = "http://localhost:3000/wishlists/"
 
 function displaySearch (url){
     fetch(url)
@@ -82,7 +82,7 @@ function deleteSearchHistory (url){
     fetch(url, {method: "DELETE"})
 }
 
-// searchBtn is a function that handles our search and make a GET request
+// handleSearch is a function that handles our search and makes a GET request
 const searchBtn = document.getElementById('search-form');
 searchBtn.addEventListener('submit', handleSearch)
 
@@ -92,36 +92,56 @@ function handleSearch (event){
     const newURL = `https://openlibrary.org/search.json?q=${searchText}`
     displaySearch(newURL)
 }
+// Function that will saves our wishlists after filling the form
+
+const wishlistForm = document.getElementById('wishlist-form')
+wishlistForm.addEventListener('submit', mimi)
+
+function mimi (event){
+    event.preventDefault()
+    const myWishlist = document.getElementById('wishlist-text').value;
+    // The code captures the time a search was done and saves it to our db.json
+    const currentDate = new Date();
+    const currentDayOfMonth = currentDate.getDate()
+    const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
+    const currentYear = currentDate.getFullYear();
+    const currentHour = currentDate.getHours();
+    const currentMinute = currentDate.getMinutes();
+    const currentSeconds = currentDate.getSeconds();
+    // The variable below combines the time to a human readable time 
+    const dateString = currentHour + ':' + currentMinute + ":" + currentSeconds + " on " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
+    
+    saveWishlist (wishlistUrl, myWishlist, dateString)
+}
+
 
 // Write a function that loads the db.json showing the recent searches
-function displayRecentSearch (){
-    fetch(recentSearchUrl)
+function displayWishlists (){
+    fetch(wishlistUrl)
     .then(response => response.json())
-    .then(data => renderRecents(data))
+    .then(data => renderWishlists(data))
 // Function Handling data from fetch
-    function renderRecents(data){
+    function renderWishlists(data){
         console.log(data)
-        const myDiv = document.getElementById('recent-data');
+        const myDiv = document.getElementById('wishlist-data');
         
-        data.forEach(previous => {
+        data.forEach(singleWishlist => {
             let li = document.createElement('li');
-            let jsonId= previous.id;
-            li.id = "recent";
+            let jsonId= singleWishlist.id;
+            li.id = "singleWishlist";
             li.innerHTML = 
-            `<div id="recent-list-div">
-            <button class="recent-search-btn" id="recent-search-btn-${jsonId}">${previous.recent_search}</button>
-            <span id="search-time"><i class="fa fa-clock-o" aria-hidden="true"></i> ${previous.time}</span> <i class="fa fa-trash" id="delete-icon-${+previous.id}" aria-hidden="true"></i>
+            `<div id="wishlist-list-div">
+            <button class="wishlist-btn" id="wishlist-btn-${jsonId}">${singleWishlist.wishlist}</button>
+            <span id="wishlist-time"><i class="fa fa-clock-o" aria-hidden="true"></i> ${singleWishlist.time}</span> <i class="fa fa-trash" id="delete-icon-${+singleWishlist.id}" aria-hidden="true"></i>
             </div>
-            `
-            
+            ` 
             myDiv.appendChild(li)
-            // Function that deletes the recent searches by making a DELETE request
+            // Function that deletes the recent searches by making a DELETE request upon click of an icon
             const deleteIcon = document.getElementById(`delete-icon-${+jsonId}`)
-
             deleteIcon.addEventListener('click', function(){
             // The delete URL is dynamic and requires an ID
             // The function takes an argument but since we can't invoke it we will put it in an anonymous function invoked when the event is fired
-                const deleteUrl = recentSearchUrl+jsonId;
+                const deleteUrl = wishlistUrl+jsonId;
                 deleteSearchHistory(deleteUrl)
             })
 
@@ -129,19 +149,4 @@ function displayRecentSearch (){
     }
 
 }
-displayRecentSearch()
-
-
-// Time 
-
-
-    // // The code captures the time a search was done and saves it to our db.json
-    // const currentDate = new Date();
-    // const currentDayOfMonth = currentDate.getDate()
-    // const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
-    // const currentYear = currentDate.getFullYear();
-    // const currentHour = currentDate.getHours();
-    // const currentMinute = currentDate.getMinutes();
-    // const currentSeconds = currentDate.getSeconds();
-    // // The variable below combines the time to a human readable time 
-    // const dateString = currentHour + ':' + currentMinute + ":" + currentSeconds + " on " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
+displayWishlists()

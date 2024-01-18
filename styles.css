@@ -69,16 +69,17 @@ li{
     border-radius: 5px;
     margin: 10px;
 }
-.recent-search-btn{
+.wishlist-btn{
     background-color: rgb(112, 11, 151);
     color: bisque;
     border-radius: 5px;
     border: none;
     width: 100%;
-    height: 40px;
+    height: 30px;
+    text-align: left;
     font-size: 1.3em;
 }
-#search-time{
+#wishlist-time{
     font-size: 0.8em;
     float: left;
     padding-top: 5px;
@@ -122,4 +123,25 @@ li{
     padding-left: 5px;
     width: 100%;    white-space: normal;
     font-size: 0.8em;
+}
+#wishlist-text{
+    margin-right: 10px;
+    background-color: rgb(112, 11, 151);
+    color: bisque;
+    border: none;
+    border-radius: 5px;
+    width: 440px;
+    height: 35px;
+    font-size: 1.2em;
+}
+#wishlist-btn {
+    background-color: rgb(112, 11, 151);
+    color: bisque;
+    margin-top: 5px;
+    border: none;
+    border-radius: 5px;
+    width: 150px;
+    height: 40px;
+    font-size: 1.5em;
+    font-weight: bold;
 }
