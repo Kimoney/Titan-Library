@@ -1,3 +1,4 @@
+function init (){
 // We have a recent search column that is using a local JSON database, the variable below holds that url
 const wishlistUrl = "http://localhost:3000/wishlists/"
     // The code captures the time a search was done and saves it to our db.json
@@ -123,26 +124,34 @@ function handleSearch (event){
 
 const wishlistForm = document.getElementById('wishlist-form')
 wishlistForm.addEventListener('submit', handleWishlistForm)
-
+console.log('after save wishlist btn')
 function handleWishlistForm (event){
     event.preventDefault()
+    console.log('after prevent default')
     const myWishlist = document.getElementById('wishlist-text').value;
     fetch(wishlistUrl)
     .then(response => response.json())
     .then(data => checkIfWishlistExist(data))
+// The Function checkIfWishlistExist checks whether a book already exists in the wishlist. If it exists a PATCH request is made, else a POST Request is made
     function checkIfWishlistExist(data){
+        const existingElementIndex = data.findIndex(wish => wish.wishlist === myWishlist)
+        console.log(existingElementIndex)
         console.log(data)
-        // We need to search and find out if the objects in the array contains a specific value in one of its keys
-        data.some((i) => {
-            if (i.wishlist === myWishlist){
-                let patchUrl = wishlistUrl+i.id
-                updateWishlist (patchUrl, dateString)
-            } else 
-                saveWishlist(wishlistUrl, myWishlist, dateString)
-        })
+        const singleWishlistObj = data[existingElementIndex]
+        // console.log(singleWishlistObj)
+        // console.log(patchUrl)
+        if (singleWishlistObj === -1) {
+            saveWishlist(wishlistUrl, myWishlist, dateString)
+// The else if below prevents a TypeError because the last else throws an undefined due to the .id (Took me a whole day to figure out)
+        } else if (singleWishlistObj === null || singleWishlistObj=== undefined){
+            saveWishlist(wishlistUrl, myWishlist, dateString)
+        }
+        else{
+            let patchUrl = wishlistUrl+singleWishlistObj.id
+            alert(`${myWishlist} already exists!`)
+            updateWishlist(patchUrl, dateString)
+            }
     }
-
-    // saveWishlist (wishlistUrl, myWishlist, dateString)
 }
 
 
@@ -153,8 +162,7 @@ function displayWishlists (){
     .then(data => renderWishlists(data))
 // Function Handling data from fetch
     function renderWishlists(data){
-        const myDiv = document.getElementById('wishlist-data');
-        
+        const myDiv = document.getElementById('wishlist-data');        
         data.forEach(singleWishlist => {
             let li = document.createElement('li');
             let jsonId= singleWishlist.id;
@@ -180,3 +188,6 @@ function displayWishlists (){
 
 }
 displayWishlists()
+}
+
+document.addEventListener("DOMContentLoaded", init)

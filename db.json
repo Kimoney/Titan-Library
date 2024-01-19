@@ -2,18 +2,23 @@
   "wishlists": [
     {
       "wishlist": "Harry Porter",
-      "time": "15:20:12 on 19-1-2024",
+      "time": "19:58:7 on 19-1-2024",
       "id": 2
     },
     {
       "wishlist": "Bachelor Unleashed Kimani Romance",
-      "time": "14:52:9 on 19-1-2024",
+      "time": "20:1:25 on 19-1-2024",
       "id": 3
     },
     {
-      "wishlist": "Harry Porter",
-      "time": "15:20:12 on 19-1-2024",
+      "wishlist": "Java and the AS/400",
+      "time": "20:1:16 on 19-1-2024",
       "id": 4
+    },
+    {
+      "wishlist": "Barry Bot",
+      "time": "20:1:21 on 19-1-2024",
+      "id": 5
     }
   ]
 }
