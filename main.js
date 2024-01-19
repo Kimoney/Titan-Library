@@ -1,5 +1,15 @@
 // We have a recent search column that is using a local JSON database, the variable below holds that url
 const wishlistUrl = "http://localhost:3000/wishlists/"
+    // The code captures the time a search was done and saves it to our db.json
+    const currentDate = new Date();
+    const currentDayOfMonth = currentDate.getDate()
+    const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
+    const currentYear = currentDate.getFullYear();
+    const currentHour = currentDate.getHours();
+    const currentMinute = currentDate.getMinutes();
+    const currentSeconds = currentDate.getSeconds();
+    // The variable below combines the time to a human readable time 
+    const dateString = currentHour + ':' + currentMinute + ":" + currentSeconds + " on " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
 
 function displaySearch (url){
     fetch(url)
@@ -77,6 +87,22 @@ function saveWishlist (url, myWishlist, dateString){
             })
                 })
 }
+
+// updateSearch is a function to save our wishlist
+
+function updateWishlist (url, dateString){
+    fetch(url, {
+        method: "PATCH",
+        headers: {
+            "Content-Type":"application/json"
+            },
+        body: JSON.stringify(
+            {
+                // wishlist:myWishlist,
+                time: dateString
+            })
+                })
+}
 //deleteSearchHistory function that deletes the user search history making a DELETE request
 function deleteSearchHistory (url){
     fetch(url, {method: "DELETE"})
@@ -87,31 +113,36 @@ const searchBtn = document.getElementById('search-form');
 searchBtn.addEventListener('submit', handleSearch)
 
 function handleSearch (event){
-    event.preventDefault();    
+    event.preventDefault();
     const searchText = document.getElementById('search-input').value;
     const newURL = `https://openlibrary.org/search.json?q=${searchText}`
     displaySearch(newURL)
 }
+
 // Function that will saves our wishlists after filling the form
 
 const wishlistForm = document.getElementById('wishlist-form')
-wishlistForm.addEventListener('submit', mimi)
+wishlistForm.addEventListener('submit', handleWishlistForm)
 
-function mimi (event){
+function handleWishlistForm (event){
     event.preventDefault()
     const myWishlist = document.getElementById('wishlist-text').value;
-    // The code captures the time a search was done and saves it to our db.json
-    const currentDate = new Date();
-    const currentDayOfMonth = currentDate.getDate()
-    const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
-    const currentYear = currentDate.getFullYear();
-    const currentHour = currentDate.getHours();
-    const currentMinute = currentDate.getMinutes();
-    const currentSeconds = currentDate.getSeconds();
-    // The variable below combines the time to a human readable time 
-    const dateString = currentHour + ':' + currentMinute + ":" + currentSeconds + " on " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
-    
-    saveWishlist (wishlistUrl, myWishlist, dateString)
+    fetch(wishlistUrl)
+    .then(response => response.json())
+    .then(data => checkIfWishlistExist(data))
+    function checkIfWishlistExist(data){
+        console.log(data)
+        // We need to search and find out if the objects in the array contains a specific value in one of its keys
+        data.some((i) => {
+            if (i.wishlist === myWishlist){
+                let patchUrl = wishlistUrl+i.id
+                updateWishlist (patchUrl, dateString)
+            } else 
+                saveWishlist(wishlistUrl, myWishlist, dateString)
+        })
+    }
+
+    // saveWishlist (wishlistUrl, myWishlist, dateString)
 }
 
 
