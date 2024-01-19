@@ -36,13 +36,13 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 85vh;
 }
 #main-wishlist-div {
     width: 25%;
     align-items:center;
     text-align: center;
-    max-height: 900px;
+    max-height: 85vh;
     overflow-y: scroll;
 }
 #heading{
