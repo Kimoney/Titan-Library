@@ -66,6 +66,7 @@ function displaySearch (url){
                         <p id="book-title">${book.title}</p>
                         <p id="book-author">${book.author}</p>
                         <p id="published">First published in ${book.published}</p>
+                        <i id="bookmark" class="fa fa-bookmark" aria-hidden="true"></i>
             `
             myDiv.appendChild(resultDiv)
         })}
