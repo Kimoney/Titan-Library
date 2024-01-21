@@ -98,7 +98,6 @@ function updateWishlist (url, dateString){
             },
         body: JSON.stringify(
             {
-                // wishlist:myWishlist,
                 time: dateString
             })
                 })
